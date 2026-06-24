@@ -1,22 +1,23 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import Navbar     from "@/components/Navbar";
+import Hero       from "@/components/Hero";
+import About      from "@/components/About";
+import FEASection from "@/components/FEASection";
+import CADSection from "@/components/CADSection";
+import Skills     from "@/components/Skills";
+import Contact    from "@/components/Contact";
+import Footer     from "@/components/Footer";
 
-export const metadata: Metadata = {
-  title: "Balaji V — Mechanical Design Engineer",
-  description:
-    "Portfolio of Balaji V — CSWP-certified Mechanical Design Engineer specialising in FEA, railway coach components, and water treatment equipment.",
-  keywords:
-    "FEA Engineer, CAE Engineer, Mechanical Design Engineer, SolidWorks, CSWP, Railway Components, Pressure Vessel, Water Treatment",
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Home() {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <main style={{ background: "var(--bg-base)" }}>
+      <Navbar />
+      <Hero />
+      <About />
+      <FEASection />
+      <CADSection />
+      <Skills />
+      <Contact />
+      <Footer />
+    </main>
   );
 }

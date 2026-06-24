@@ -1,287 +1,135 @@
 "use client";
-import { useState } from "react";
-import { cadProjects } from "@/lib/data";
+import { personal } from "@/lib/data";
 
-type Category = "All" | "Railway" | "Water Treatment";
+const softwareLevels: Record<string, number> = {
+  SolidWorks:             95,
+  "SolidWorks Simulation": 90,
+  CATIA:                  75,
+  AutoCAD:                80,
+};
 
-function ProjectCard({ project }: { project: (typeof cadProjects)[0] }) {
-  const [imgIdx, setImgIdx] = useState(0);
-  const hasMultiple = project.gallery.length > 1;
-
+export default function Skills() {
   return (
-    <div className="card">
-      {/* image area */}
-      <div
-        style={{
-          position:   "relative",
-          aspectRatio: "16/10",
-          overflow:   "hidden",
-          background: "var(--bg-base)",
-        }}
-      >
-        <img
-          src={project.gallery[imgIdx].src}
-          alt={project.gallery[imgIdx].alt}
-          style={{
-            width:      "100%",
-            height:     "100%",
-            objectFit:  "cover",
-            display:    "block",
-            transition: "transform 0.3s",
-          }}
-          onMouseEnter={(e) =>
-            ((e.target as HTMLElement).style.transform = "scale(1.04)")
-          }
-          onMouseLeave={(e) =>
-            ((e.target as HTMLElement).style.transform = "scale(1)")
-          }
-        />
-
-        {/* category badge */}
-        <div
-          style={{
-            position:   "absolute",
-            top:        "12px",
-            left:       "12px",
-            padding:    "3px 10px",
-            background: "rgba(11,14,20,0.75)",
-            borderRadius: "3px",
-            fontFamily: "JetBrains Mono, monospace",
-            fontSize:   "10px",
-            color:      "var(--text-muted)",
-            letterSpacing: "0.08em",
-            backdropFilter: "blur(4px)",
-          }}
-        >
-          {project.category}
-        </div>
-
-        {/* carousel arrows */}
-        {hasMultiple && (
-          <>
-            <button
-              onClick={() =>
-                setImgIdx((p) => (p - 1 + project.gallery.length) % project.gallery.length)
-              }
-              style={{
-                position:   "absolute",
-                left:       "8px",
-                top:        "50%",
-                transform:  "translateY(-50%)",
-                background: "rgba(11,14,20,0.7)",
-                border:     "1px solid var(--border)",
-                color:      "var(--text-primary)",
-                width:      "30px",
-                height:     "30px",
-                borderRadius: "50%",
-                cursor:     "pointer",
-                fontSize:   "14px",
-                display:    "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              ‹
-            </button>
-            <button
-              onClick={() =>
-                setImgIdx((p) => (p + 1) % project.gallery.length)
-              }
-              style={{
-                position:   "absolute",
-                right:      "8px",
-                top:        "50%",
-                transform:  "translateY(-50%)",
-                background: "rgba(11,14,20,0.7)",
-                border:     "1px solid var(--border)",
-                color:      "var(--text-primary)",
-                width:      "30px",
-                height:     "30px",
-                borderRadius: "50%",
-                cursor:     "pointer",
-                fontSize:   "14px",
-                display:    "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              ›
-            </button>
-
-            {/* dot indicator */}
-            <div
-              style={{
-                position:       "absolute",
-                bottom:         "8px",
-                left:           "50%",
-                transform:      "translateX(-50%)",
-                display:        "flex",
-                gap:            "5px",
-              }}
-            >
-              {project.gallery.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setImgIdx(i)}
-                  style={{
-                    width:        i === imgIdx ? "18px" : "6px",
-                    height:       "6px",
-                    borderRadius: "3px",
-                    background:   i === imgIdx ? "var(--accent)" : "rgba(255,255,255,0.3)",
-                    border:       "none",
-                    cursor:       "pointer",
-                    padding:      0,
-                    transition:   "width 0.2s, background 0.2s",
-                  }}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* card body */}
-      <div style={{ padding: "20px" }}>
-        <div
-          style={{
-            display:        "flex",
-            justifyContent: "space-between",
-            alignItems:     "flex-start",
-            marginBottom:   "8px",
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: "Space Grotesk, sans-serif",
-              fontSize:   "16px",
-              fontWeight: 600,
-              color:      "var(--text-primary)",
-            }}
-          >
-            {project.title}
-          </h3>
-          {project.pn && (
-            <span
-              style={{
-                fontFamily: "JetBrains Mono, monospace",
-                fontSize:   "10px",
-                color:      "var(--text-muted)",
-                whiteSpace: "nowrap",
-                marginLeft: "8px",
-              }}
-            >
-              {project.pn}
-            </span>
-          )}
-        </div>
-
-        <p
-          style={{
-            fontSize:     "13px",
-            color:        "var(--text-secondary)",
-            lineHeight:   1.65,
-            marginBottom: "14px",
-          }}
-        >
-          {project.desc}
-        </p>
-
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-          {project.tags.map((t) => (
-            <span key={t} className="tag">{t}</span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function CADSection() {
-  const [filter, setFilter] = useState<Category>("All");
-
-  const filtered =
-    filter === "All"
-      ? cadProjects
-      : cadProjects.filter((p) => p.category === filter);
-
-  const categories: Category[] = ["All", "Railway", "Water Treatment"];
-
-  return (
-    <section id="projects" className="section" style={{ background: "var(--bg-surface)" }}>
+    <section id="skills" className="section" style={{ background: "var(--bg-base)" }}>
       <div className="container">
-        <p className="eyebrow">CAD Projects</p>
+        <p className="eyebrow">Capabilities</p>
         <span className="accent-bar" />
 
         <div
           style={{
-            display:        "flex",
-            justifyContent: "space-between",
-            alignItems:     "flex-end",
-            marginBottom:   "36px",
-            flexWrap:       "wrap",
-            gap:            "16px",
+            display:             "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap:                 "56px",
           }}
+          className="skills-grid"
         >
-          <h2 style={{ fontSize: "clamp(24px, 3vw, 36px)" }}>
-            Designed in SolidWorks
-          </h2>
+          {/* left — software bars */}
+          <div>
+            <h2 style={{ fontSize: "clamp(22px, 3vw, 32px)", marginBottom: "32px" }}>
+              Software Proficiency
+            </h2>
 
-          {/* filter tabs */}
-          <div
-            style={{
-              display:      "flex",
-              gap:          "4px",
-              background:   "var(--bg-card)",
-              padding:      "4px",
-              borderRadius: "6px",
-              border:       "1px solid var(--border)",
-            }}
-          >
-            {categories.map((c) => (
-              <button
-                key={c}
-                onClick={() => setFilter(c)}
-                style={{
-                  padding:      "6px 16px",
-                  borderRadius: "4px",
-                  border:       "none",
-                  cursor:       "pointer",
-                  fontFamily:   "Space Grotesk, sans-serif",
-                  fontSize:     "12px",
-                  fontWeight:   600,
-                  letterSpacing: "0.04em",
-                  background:   filter === c ? "var(--accent)" : "transparent",
-                  color:        filter === c ? "#0B0E14"          : "var(--text-muted)",
-                  transition:   "all 0.2s",
-                }}
-              >
-                {c}
-              </button>
+            {personal.skills.software.map((s) => (
+              <div key={s} style={{ marginBottom: "22px" }}>
+                <div
+                  style={{
+                    display:        "flex",
+                    justifyContent: "space-between",
+                    marginBottom:   "7px",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "Space Grotesk, sans-serif",
+                      fontWeight: 500,
+                      fontSize:   "14px",
+                      color:      "var(--text-primary)",
+                    }}
+                  >
+                    {s}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: "JetBrains Mono, monospace",
+                      fontSize:   "12px",
+                      color:      "var(--accent)",
+                    }}
+                  >
+                    {softwareLevels[s]}%
+                  </span>
+                </div>
+                <div
+                  style={{
+                    height:       "5px",
+                    background:   "var(--border)",
+                    borderRadius: "3px",
+                    overflow:     "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      height:     "100%",
+                      width:      `${softwareLevels[s]}%`,
+                      background: "linear-gradient(to right, var(--accent), rgba(245,158,11,0.5))",
+                      borderRadius: "3px",
+                    }}
+                  />
+                </div>
+              </div>
             ))}
           </div>
-        </div>
 
-        {/* project grid */}
-        <div
-          style={{
-            display:             "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap:                 "20px",
-          }}
-          className="cad-grid"
-        >
-          {filtered.map((p) => (
-            <ProjectCard key={p.id} project={p} />
-          ))}
+          {/* right — domain tags */}
+          <div>
+            <h2 style={{ fontSize: "clamp(22px, 3vw, 32px)", marginBottom: "32px" }}>
+              Domains & Methods
+            </h2>
+
+            {[
+              { heading: "Standards & Codes", items: personal.skills.standards, color: "var(--blue)", dim: "rgba(59,130,246,0.1)", border: "rgba(59,130,246,0.2)" },
+              { heading: "Methods",           items: personal.skills.methods,   color: "var(--green)", dim: "rgba(16,185,129,0.1)", border: "rgba(16,185,129,0.2)" },
+              { heading: "Industry Domains",  items: personal.skills.domains,   color: "var(--accent)", dim: "var(--accent-dim)", border: "rgba(245,158,11,0.2)" },
+            ].map((group) => (
+              <div key={group.heading} style={{ marginBottom: "28px" }}>
+                <p
+                  style={{
+                    fontFamily:    "JetBrains Mono, monospace",
+                    fontSize:      "10px",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color:         "var(--text-muted)",
+                    marginBottom:  "10px",
+                  }}
+                >
+                  {group.heading}
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
+                  {group.items.map((item) => (
+                    <span
+                      key={item}
+                      style={{
+                        padding:      "4px 12px",
+                        borderRadius: "3px",
+                        fontFamily:   "JetBrains Mono, monospace",
+                        fontSize:     "11px",
+                        background:   group.dim,
+                        color:        group.color,
+                        border:       `1px solid ${group.border}`,
+                      }}
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       <style>{`
-        @media (max-width: 1024px) {
-          .cad-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 600px) {
-          .cad-grid { grid-template-columns: 1fr !important; }
+        @media (max-width: 768px) {
+          .skills-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
         }
       `}</style>
     </section>
